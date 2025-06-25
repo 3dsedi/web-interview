@@ -11,7 +11,7 @@ export function getAllTodoLists(db) {
 
 export function getTodoListById(db, id) {
   try {
-    return db.prepare('SELECT * FROM todo_lists WHERE id = ?').run(id)
+    return db.prepare('SELECT * FROM todo_lists WHERE id = ?').get(id)
   } catch (err) {
     console.error('DB error:', err)
     return null

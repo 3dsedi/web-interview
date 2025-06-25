@@ -3,7 +3,7 @@ import cors from 'cors'
 import todoListsRouter from './service/todoLists.js'
 import todosRouter from './service/todos.js'
 
-const app = express()
+export const app = express()
 
 app.use(cors())
 app.use(express.json())

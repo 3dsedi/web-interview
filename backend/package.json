@@ -4,7 +4,7 @@
     "lint": "eslint --ext .js src",
     "start": "node --watch src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@types/better-sqlite3": "^7.6.13",
@@ -14,6 +14,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.4",
     "eslint": "^8.57.0",
     "jest": "^30.0.2",

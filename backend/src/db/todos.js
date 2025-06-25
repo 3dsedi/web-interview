@@ -32,7 +32,7 @@ export function updateTodo(db, id, { title, text, completed, due_date }) {
       completed_at = completed ? new Date().toISOString() : null
     }
     db.prepare(
-      'UPDATE todos SET text = ?, completed = ?, completed_at = ?, due_date = ? WHERE id = ?'
+      'UPDATE todos SET title = ?, text = ?, completed = ?, completed_at = ?, due_date = ? WHERE id = ?'
     ).run(
       title !== undefined ? title : todo.title,
       text !== undefined ? text : todo.text,

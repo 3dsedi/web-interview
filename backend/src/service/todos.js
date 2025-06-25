@@ -10,6 +10,8 @@ router.get('/todo-lists/:listId/todos', (req, res) => {
   try {
     const { listId } = req.params
     if (!validate(listId)) return res.status(400).json({ error: 'Invalid ID format' })
+      const list = getTodoListById(db, listId)
+    if (!list) return res.status(404).json({ error: 'Todo list not found' })
 
     const todos = getTodosByListId(db, listId)
     if (todos === null) return res.status(500).json({ error: 'Database error' })
@@ -29,13 +31,12 @@ router.post('/todo-lists/:listId/todos', (req, res) => {
     const list = getTodoListById(db, listId)
     if (!list) return res.status(404).json({ error: 'Todo list not found' })
 
-    const {title, text, due_date } = req.body
+    const { title, text, due_date } = req.body
     if (!title) return res.status(400).json({ error: 'Title is required' })
 
     const result = createTodo(db, listId, title, text, due_date)
     if (result === null) return res.status(500).json({ error: 'Database error' })
     res.status(201).json(result)
-
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Internal server error' })
@@ -47,11 +48,10 @@ router.patch('/todos/:id', (req, res) => {
     const { id } = req.params
     if (!validate(id)) return res.status(400).json({ error: 'Invalid ID format' })
 
-    const {title, text, completed, due_date } = req.body
-    const result = updateTodo(db, id, {title, text, completed, due_date })
+    const { title, text, completed, due_date } = req.body
+    const result = updateTodo(db, id, { title, text, completed, due_date })
     if (result === null) return res.status(404).json({ error: 'Todo id not found' })
     res.json(result)
-  
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Internal server error' })
