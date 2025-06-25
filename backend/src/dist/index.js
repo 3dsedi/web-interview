@@ -1,0 +1,14 @@
+"use strict";
+exports.__esModule = true;
+var express_1 = require("express");
+var cors_1 = require("cors");
+var todoLists_js_1 = require("./service/todoLists.js");
+var todos_js_1 = require("./service/todos.js");
+var app = express_1["default"]();
+app.use(cors_1["default"]());
+app.use(express_1["default"].json());
+app.use('/api/todo-lists', todoLists_js_1["default"]);
+app.use('/api', todos_js_1["default"]);
+var PORT = 3001;
+app.get('/', function (req, res) { return res.send('Hello World!'); });
+app.listen(PORT, function () { return console.log("Example app listening on port " + PORT + "!"); });
