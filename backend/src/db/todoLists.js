@@ -1,12 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-export interface TodoList {
-  id: string
-  title: string
-  created_at: string
-}
-
-export function getAllTodoLists(db) : TodoList[] | null {
+export function getAllTodoLists(db) {
   try {
     return db.prepare('SELECT * FROM todo_lists').all()
   } catch (err) {

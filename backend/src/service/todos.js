@@ -1,7 +1,7 @@
 import express from 'express'
 import db from '../db/db.js'
-import { getTodosByListId, createTodo, updateTodo, deleteTodo } from '../db/todos.ts'
-import { getTodoListById } from '../db/todoLists.ts'
+import { getTodosByListId, createTodo, updateTodo, deleteTodo } from '../db/todos.js'
+import { getTodoListById } from '../db/todoLists.js'
 import { validate } from 'uuid'
 
 const router = express.Router()

@@ -5,7 +5,7 @@ import {
   createTodoList,
   deleteTodoList,
   updateTodoListTitle,
-} from '../db/todoLists.ts'
+} from '../db/todoLists.js'
 import { validate } from 'uuid'
 
 const router = express.Router()

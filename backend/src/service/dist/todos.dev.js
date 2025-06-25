@@ -11,7 +11,7 @@ var _db = _interopRequireDefault(require("../db/db.js"));
 
 var _todos = require("../db/todos.js");
 
-var _todoLists = require("../db/todoLists.ts");
+var _todoLists = require("../db/todoLists.js");
 
 var _uuid = require("uuid");
 

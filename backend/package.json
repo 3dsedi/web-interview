@@ -2,9 +2,8 @@
   "type": "module",
   "scripts": {
     "lint": "eslint --ext .js src",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node --watch src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "jest"
   },
   "dependencies": {
@@ -19,8 +18,6 @@
     "eslint": "^8.57.0",
     "jest": "^30.0.2",
     "nodemon": "^3.1.10",
-    "supertest": "^7.1.1",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "supertest": "^7.1.1"
   }
 }

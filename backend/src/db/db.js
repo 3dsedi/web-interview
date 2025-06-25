@@ -1,6 +1,7 @@
-import Database, { Database as DatabaseType } from 'better-sqlite3'
+import Database from 'better-sqlite3'
 
-let db: DatabaseType
+let db
+
 try {
   db = new Database('todos.db')
   db.exec(`
