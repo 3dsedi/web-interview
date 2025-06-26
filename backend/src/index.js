@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import todoListsRouter from './service/todoLists.js'
-import todosRouter from './service/todos.js'
+import todoListsRouter from './routes/todoLists.js'
+import todosRouter from './routes/todos.js'
 
 export const app = express()
 

@@ -1,8 +1,8 @@
 /* eslint-env jest */
 import request from 'supertest'
 import express from 'express'
-import todosRouter from '../src/service/todos.js'
-import todoListsRouter from '../src/service/todoLists.js'
+import todosRouter from '../src/routes/todos.js'
+import todoListsRouter from '../src/routes/todoLists.js'
 import { validate as validateUuid } from 'uuid'
 
 const app = express()
@@ -29,7 +29,7 @@ describe('Todos API', () => {
     expect(res.body.error).toBe('Title is required')
   })
 
-  it('Create todo with non existing list should return 404', async () => {
+  it('Create todo for non existing list should return 404', async () => {
     const fakeId = '123e4567-e89b-12d3-a456-426614174000'
     expect(validateUuid(fakeId)).toBe(true)
     const res = await request(app)

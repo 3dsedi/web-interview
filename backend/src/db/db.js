@@ -10,6 +10,7 @@ try {
       title TEXT NOT NULL,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
+
     CREATE TABLE IF NOT EXISTS todos (
       id TEXT PRIMARY KEY,
       list_id INTEGER NOT NULL,
@@ -19,7 +20,7 @@ try {
       completed_at TEXT,
       due_date TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
-      FOREIGN KEY (list_id) REFERENCES todo_lists(id)
+      FOREIGN KEY (list_id) REFERENCES todo_lists(id) ON DELETE CASCADE
     );
   `)
 } catch (error) {

@@ -2,7 +2,7 @@
 import request from 'supertest'
 import express from 'express'
 import { validate as validateUuid } from 'uuid'
-import todoListsRouter from '../src/service/todoLists.js'
+import todoListsRouter from '../src/routes/todoLists.js'
 
 const app = express()
 app.use(express.json())
@@ -36,7 +36,7 @@ describe('TodoLists API', () => {
   })
 
   // PATCH
-  it('Update Todo lost with empty title should return 400', async () => {
+  it('Update Todo list with empty title should return 400', async () => {
     const res = await request(app).patch(`/api/todo-lists/${createdId}`).send({ title: '' })
     expect(res.statusCode).toBe(400)
     expect(res.body.error).toBe('Title is required')
@@ -53,7 +53,7 @@ describe('TodoLists API', () => {
     expect(validateUuid(fakeId)).toBe(true)
     const res = await request(app).patch(`/api/todo-lists/${fakeId}`).send({ title: 'New Title' })
     expect(res.statusCode).toBe(404)
-    expect(res.body.error).toBe('List not found')
+    expect(res.body.error).toBe('Todo list not found')
   })
 
   it('Update with correct id should update title', async () => {
@@ -76,7 +76,7 @@ describe('TodoLists API', () => {
     expect(validateUuid(fakeId)).toBe(true)
     const res = await request(app).delete(`/api/todo-lists/${fakeId}`)
     expect(res.statusCode).toBe(404)
-    expect(res.body.error).toBe('List not found')
+    expect(res.body.error).toBe('Todo list not found')
   })
 
   it('Delete with correct id should return 204', async () => {
