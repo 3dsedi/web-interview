@@ -8,9 +8,6 @@ export function getTodosByListIdService(listId) {
     throw new Error('Todo list not found')
   }
   const todos = getTodosByListId(db, listId)
-  if (!todos || todos.length === 0) {
-    throw new Error('No todos found for this list')
-  }
   return todos
 }
 
