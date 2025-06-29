@@ -99,6 +99,7 @@ export const Sidebar = ({
             fullWidth
             variant='contained'
             startIcon={<AddIcon />}
+            data-testid="create-new-list-button"
             sx={{
               py: 1.5,
               textTransform: 'none',
@@ -134,11 +135,12 @@ export const Sidebar = ({
             label='Todo List Title'
             value={newListTitle}
             onChange={(e) => setNewListTitle(e.target.value)}
+            data-testid="todo-list-title-input"
             autoFocus
           />
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-            <Button onClick={(e) => setOpenModal(false)}>Cancel</Button>
-            <Button onClick={handleCreateTodoList} disabled={!newListTitle}>
+            <Button onClick={(e) => setOpenModal(false)} data-testid="cancel-button">Cancel</Button>
+            <Button onClick={handleCreateTodoList} disabled={!newListTitle} data-testid="create-button">
               Create
             </Button>
           </Box>

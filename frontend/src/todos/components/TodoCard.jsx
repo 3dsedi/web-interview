@@ -119,6 +119,7 @@ export const TodoCard = ({ todoList }) => {
 
   return (
     <Card
+      data-testid="todo-card"
       sx={{
         height: 'fit-content',
         minHeight: 200,
@@ -140,6 +141,7 @@ export const TodoCard = ({ todoList }) => {
               <LinearProgress
                 variant='determinate'
                 value={progress.percentage}
+                data-testid="progress-bar"
                 sx={{
                   flex: 1,
                   height: 8,
@@ -200,6 +202,7 @@ export const TodoCard = ({ todoList }) => {
       >
         <Button
           startIcon={showAddTask ? <Close /> : <Add />}
+          data-testid="add-todo-button"
           onClick={() => {
             if (showAddTask && !newTask.title.trim()) {
               resetForm()
@@ -240,6 +243,7 @@ export const TodoCard = ({ todoList }) => {
               variant='outlined'
               size='small'
               value={newTask.title}
+              data-testid="todo-title-input"
               onChange={(e) => handleTaskChange('title', e.target.value)}
               sx={{ mb: 2 }}
             />
@@ -251,6 +255,7 @@ export const TodoCard = ({ todoList }) => {
               multiline
               rows={3}
               value={newTask.detail}
+              data-testid="todo-detail-input"
               onChange={(e) => handleTaskChange('detail', e.target.value)}
               sx={{ mb: 2 }}
             />

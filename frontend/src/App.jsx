@@ -1,4 +1,5 @@
 import React from 'react'
+import { Toaster } from 'react-hot-toast'
 import { HomePage } from './todos/components/HomePage'
 
 
@@ -24,6 +25,16 @@ const App = () => {
   return (
     <MainWrapper>
       <HomePage  />
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+        }}
+      />
     </MainWrapper>
   )
 }
