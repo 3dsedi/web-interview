@@ -101,7 +101,7 @@ describe('Todo App - Complete E2E Test', () => {
     
     cy.focused().blur()
     
-    // Verify first todo appears
+    // Verify first todo created
     cy.get('[data-testid="todo-card"]')
       .contains(listTitle)
       .parents('[data-testid="todo-card"]')
@@ -122,7 +122,7 @@ describe('Todo App - Complete E2E Test', () => {
     
     cy.focused().blur()
     
-    // Verify second todo appears
+    // Verify second todo created
     cy.get('[data-testid="todo-card"]')
       .contains(listTitle)
       .parents('[data-testid="todo-card"]')
@@ -156,7 +156,7 @@ describe('Todo App - Complete E2E Test', () => {
       .last()
       .check()
     
-    // Check 100% completion
+    // Check progress (2/2)
     cy.get('[data-testid="todo-card"]')
       .contains(listTitle)
       .parents('[data-testid="todo-card"]')
@@ -164,7 +164,7 @@ describe('Todo App - Complete E2E Test', () => {
     
     cy.contains(/All tasks completed!/i).should('be.visible')
     
-    // Now uncheck the second todo to make it incomplete
+    // Uncheck the second todo to make it incomplete
     cy.get('[data-testid="todo-card"]')
       .contains(listTitle)
       .parents('[data-testid="todo-card"]')
@@ -178,7 +178,6 @@ describe('Todo App - Complete E2E Test', () => {
       .parents('[data-testid="todo-card"]')
       .should('contain', '1/2')
     
-    // Verify "All tasks completed!" message is gone
     cy.contains(/All tasks completed!/i).should('not.exist')
   })
 

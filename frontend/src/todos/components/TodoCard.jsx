@@ -11,6 +11,7 @@ import {
   LinearProgress,
 } from '@mui/material'
 import { Add, Close, Assignment } from '@mui/icons-material'
+import toast from 'react-hot-toast'
 import { createTodo, updateTodo, deleteTodo, getTodos } from '../../api'
 import { TodoDetail } from './TodoDetail'
 
@@ -58,8 +59,8 @@ export const TodoCard = ({ todoList }) => {
 
       if (a.completed === 0) {
         if (!a.due_date && !b.due_date) return 0
-        if (!a.due_date) return 1 
-        if (!b.due_date) return -1 
+        if (!a.due_date) return 1
+        if (!b.due_date) return -1
 
         const dateA = new Date(a.due_date)
         const dateB = new Date(b.due_date)
@@ -69,12 +70,15 @@ export const TodoCard = ({ todoList }) => {
     })
   }, [todos])
 
-  const handleTaskChange = (field, value) => {
+  const handleTodoChange = (field, value) => {
     const updatedTask = { ...newTask, [field]: value }
     setNewTask(updatedTask)
   }
 
   const handleCreateTodo = async () => {
+    if (!newTask.title || !newTask.title.trim()) {
+      return toast.error('Title is required')
+    }
     if (newTask.title.trim()) {
       try {
         const todoData = {
@@ -84,10 +88,9 @@ export const TodoCard = ({ todoList }) => {
         }
         const result = await createTodo(todoList.id, todoData)
         setTodos([...todos, result])
-        console.log('Todo created successfully:', result)
         resetForm()
       } catch (error) {
-        console.error('Error creating todo:', error)
+        toast.error('Error creating todo')
       }
     }
   }
@@ -119,7 +122,7 @@ export const TodoCard = ({ todoList }) => {
 
   return (
     <Card
-      data-testid="todo-card"
+      data-testid='todo-card'
       sx={{
         height: 'fit-content',
         minHeight: 200,
@@ -141,7 +144,7 @@ export const TodoCard = ({ todoList }) => {
               <LinearProgress
                 variant='determinate'
                 value={progress.percentage}
-                data-testid="progress-bar"
+                data-testid='progress-bar'
                 sx={{
                   flex: 1,
                   height: 8,
@@ -202,7 +205,7 @@ export const TodoCard = ({ todoList }) => {
       >
         <Button
           startIcon={showAddTask ? <Close /> : <Add />}
-          data-testid="add-todo-button"
+          data-testid='add-todo-button'
           onClick={() => {
             if (showAddTask && !newTask.title.trim()) {
               resetForm()
@@ -239,12 +242,13 @@ export const TodoCard = ({ todoList }) => {
           >
             <TextField
               fullWidth
+              required
               label='Title'
               variant='outlined'
               size='small'
               value={newTask.title}
-              data-testid="todo-title-input"
-              onChange={(e) => handleTaskChange('title', e.target.value)}
+              data-testid='todo-title-input'
+              onChange={(e) => handleTodoChange('title', e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField
@@ -255,8 +259,8 @@ export const TodoCard = ({ todoList }) => {
               multiline
               rows={3}
               value={newTask.detail}
-              data-testid="todo-detail-input"
-              onChange={(e) => handleTaskChange('detail', e.target.value)}
+              data-testid='todo-detail-input'
+              onChange={(e) => handleTodoChange('detail', e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField
@@ -266,7 +270,7 @@ export const TodoCard = ({ todoList }) => {
               variant='outlined'
               size='small'
               value={newTask.dueDate}
-              onChange={(e) => handleTaskChange('dueDate', e.target.value)}
+              onChange={(e) => handleTodoChange('dueDate', e.target.value)}
               InputLabelProps={{
                 shrink: true,
               }}

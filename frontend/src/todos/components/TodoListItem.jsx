@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, IconButton, TextField } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
+import toast from 'react-hot-toast'
 
 export const TodoListItem = ({ title, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -11,14 +12,22 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
   }, [title])
 
   const handleSaveEdit = async () => {
+    if (!editTitle || !editTitle.trim()) {
+      toast.error('Title is required')
+      return
+    }
+    
     if (editTitle.trim() && editTitle !== title) {
       try {
         await onEdit(editTitle.trim())
+        setIsEditing(false)
       } catch (error) {
         setEditTitle(title)
+        setIsEditing(false)
       }
+    } else {
+      setIsEditing(false)
     }
-    setIsEditing(false)
   }
 
   const handleCancelEdit = () => {
@@ -61,6 +70,7 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
             }}
             onBlur={handleSaveEdit}
             autoFocus
+            required
             size='small'
             fullWidth
             sx={{

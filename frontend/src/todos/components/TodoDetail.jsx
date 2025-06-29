@@ -10,6 +10,7 @@ import {
   Chip,
 } from '@mui/material'
 import { MoreVert, Edit, Delete } from '@mui/icons-material'
+import toast from 'react-hot-toast'
 
 export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
   const [editing, setEditing] = useState(false)
@@ -18,7 +19,7 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
   const [editData, setEditData] = useState({
     title: todo.title,
     text: todo.text || '',
-    due_date: todo.due_date || ''
+    due_date: todo.due_date || '',
   })
   const containerRef = useRef(null)
   const open = Boolean(anchorEl)
@@ -44,12 +45,21 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
   }
 
   const handleSave = useCallback(() => {
+    if (!editData.title || !editData.title.trim()) {
+      toast.error('Title is required')
+      return
+    }
+    
     onUpdate(todo.id, editData)
     setEditing(false)
   }, [todo.id, editData, onUpdate])
 
   const handleBlur = (event) => {
     if (editing && !containerRef.current?.contains(event.relatedTarget)) {
+      if (!editData.title || !editData.title.trim()) {
+        toast.error('Title is required')
+        return
+      }
       handleSave()
     }
   }
@@ -58,22 +68,22 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
     setEditData({
       title: todo.title,
       text: todo.text || '',
-      due_date: todo.due_date || ''
+      due_date: todo.due_date || '',
     })
     setEditing(false)
   }
 
   const handleCompletedChange = (isCompleted) => {
     setCompleted(isCompleted)
-    onUpdate(todo.id, { 
-      completed: isCompleted ? 1 : 0
+    onUpdate(todo.id, {
+      completed: isCompleted ? 1 : 0,
     })
   }
 
   const handleChange = (field, value) => {
-    setEditData(prev => ({
+    setEditData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }))
   }
 
@@ -82,8 +92,8 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
       const completedDate = new Date(todo.completed_at).toLocaleDateString()
       return {
         label: `Completed ${completedDate}`,
-        color: '#e8f5e8', 
-        textColor: '#2e7d32'
+        color: '#e8f5e8',
+        textColor: '#2e7d32',
       }
     }
 
@@ -97,20 +107,20 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
     if (diffDays > 3) {
       return {
         label: `${diffDays} days left`,
-        color: '#e8f5e8', 
-        textColor: '#2e7d32'
+        color: '#e8f5e8',
+        textColor: '#2e7d32',
       }
     } else if (diffDays >= 0) {
       return {
         label: diffDays === 0 ? 'Due today' : `${diffDays} days left`,
-        color: '#fff8e1', 
-        textColor: '#f57c00'
+        color: '#fff8e1',
+        textColor: '#f57c00',
       }
     } else {
       return {
         label: `${Math.abs(diffDays)} days overdue`,
-        color: '#ffebee', 
-        textColor: '#d32f2f'
+        color: '#ffebee',
+        textColor: '#d32f2f',
       }
     }
   }
@@ -148,10 +158,10 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
                 handleCompletedChange(e.target.checked)
               }}
               sx={{ p: 0, mt: 0.25, mr: 1 }}
-              size="small"
+              size='small'
             />
           </Box>
-          
+
           <Box sx={{ flex: 1 }}>
             {editing ? (
               <>
@@ -162,32 +172,33 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
                     if (e.key === 'Enter') handleSave()
                     if (e.key === 'Escape') handleCancel()
                   }}
-                  variant="standard"
-                  size="small"
+                  variant='standard'
+                  size='small'
+                  required
                   sx={{ mb: 1, width: '100%' }}
                   autoFocus
                   onClick={(e) => e.stopPropagation()}
                 />
                 <TextField
                   fullWidth
-                  label="Detail"
+                  label='Detail'
                   value={editData.text}
                   onChange={(e) => handleChange('text', e.target.value)}
                   multiline
                   rows={2}
-                  variant="standard"
-                  size="small"
+                  variant='standard'
+                  size='small'
                   sx={{ mb: 1 }}
                   onClick={(e) => e.stopPropagation()}
                 />
                 <TextField
                   fullWidth
-                  label="Due Date"
-                  type="date"
+                  label='Due Date'
+                  type='date'
                   value={editData.due_date}
                   onChange={(e) => handleChange('due_date', e.target.value)}
-                  variant="standard"
-                  size="small"
+                  variant='standard'
+                  size='small'
                   InputLabelProps={{ shrink: true }}
                   onClick={(e) => e.stopPropagation()}
                 />
@@ -195,7 +206,7 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
             ) : (
               <>
                 <Typography
-                  variant="body2"
+                  variant='body2'
                   sx={{
                     fontWeight: 500,
                     textDecoration: completed ? 'line-through' : 'none',
@@ -206,9 +217,9 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
                   {todo.title}
                 </Typography>
                 {todo.text && (
-                  <Typography 
-                    variant="caption" 
-                    color="text.secondary" 
+                  <Typography
+                    variant='caption'
+                    color='text.secondary'
                     sx={{ display: 'block', mb: dueDateChip ? 0.5 : 0 }}
                   >
                     {todo.text}
@@ -217,15 +228,15 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
                 {dueDateChip && (
                   <Chip
                     label={dueDateChip.label}
-                    size="small"
+                    size='small'
                     sx={{
                       backgroundColor: dueDateChip.color,
                       color: dueDateChip.textColor,
                       fontSize: '0.7rem',
                       height: 20,
                       '& .MuiChip-label': {
-                        px: 1
-                      }
+                        px: 1,
+                      },
                     }}
                   />
                 )}
@@ -236,12 +247,8 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
 
         {!editing && (
           <Box onClick={(e) => e.stopPropagation()}>
-            <IconButton
-              size="small"
-              onClick={handleMenuClick}
-              sx={{ ml: 1, mt: -0.5 }}
-            >
-              <MoreVert fontSize="small" />
+            <IconButton size='small' onClick={handleMenuClick} sx={{ ml: 1, mt: -0.5 }}>
+              <MoreVert fontSize='small' />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -250,11 +257,11 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <MenuItem onClick={handleEditTodo}>
-                <Edit sx={{ mr: 1 }} fontSize="small" />
+                <Edit sx={{ mr: 1 }} fontSize='small' />
                 Edit
               </MenuItem>
               <MenuItem onClick={handleDeleteTodo} sx={{ color: 'error.main' }}>
-                <Delete sx={{ mr: 1 }} fontSize="small" />
+                <Delete sx={{ mr: 1 }} fontSize='small' />
                 Delete
               </MenuItem>
             </Menu>
