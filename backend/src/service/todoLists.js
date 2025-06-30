@@ -4,9 +4,6 @@ import db from '../db/db.js'
 
 export function getAllTodoListsService() {
   const lists = getAllTodoLists(db)
-  if (!lists || lists.length === 0) {
-    throw new Error('No todo lists found')
-  }
   return lists
 }
 
