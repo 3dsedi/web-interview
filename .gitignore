@@ -1,7 +1,14 @@
 # Frontend
 frontend/node_modules
+frontend/build
+frontend/dist
 
 # Backend
 backend/node_modules
 backend/npm-debug.log
 backend/todos.db
+backend/dist
+backend/service/dist
+
+# VS Code
+.vscode/launch.json
