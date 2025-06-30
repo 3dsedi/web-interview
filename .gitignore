@@ -6,7 +6,7 @@ frontend/dist
 # Backend
 backend/node_modules
 backend/npm-debug.log
-backend/todos.db
+backend/data/todos.db
 backend/dist
 backend/service/dist
 
