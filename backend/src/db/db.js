@@ -1,9 +1,11 @@
 import Database from 'better-sqlite3'
+import path from 'path'
 
 let db
 
 try {
-  db = new Database('todos.db')
+  const dbPath = path.join(process.cwd(), 'data', 'todos.db')
+  db = new Database(dbPath)
   db.exec(`
     CREATE TABLE IF NOT EXISTS todo_lists (
       id TEXT PRIMARY KEY,

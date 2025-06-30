@@ -7,7 +7,7 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(title)
 
-    useEffect(() => {
+  useEffect(() => {
     setEditTitle(title)
   }, [title])
 
@@ -16,12 +16,12 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
       toast.error('Title is required')
       return
     }
-    
+
     if (editTitle.trim() && editTitle !== title) {
-      try {
-        await onEdit(editTitle.trim())
+      const result = await onEdit(editTitle.trim())
+      if (result) {
         setIsEditing(false)
-      } catch (error) {
+      } else {
         setEditTitle(title)
         setIsEditing(false)
       }
@@ -46,7 +46,7 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
         gap: 2,
         borderRadius: 5,
         '&:hover': {
-          borderRadius: 5, 
+          borderRadius: 5,
           border: '1px solid #e0e0e0',
           cursor: 'pointer',
           backgroundColor: '#f5f5f5',
@@ -57,9 +57,7 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
         },
       }}
     >
-      <Box 
-        sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}
-      >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
         {isEditing ? (
           <TextField
             value={editTitle}

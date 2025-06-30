@@ -1,53 +1,47 @@
-# Sellpy web interview
+# Todo App - Docker Setup & Recruitment Demo
 
-Welcome to Sellpy's web interview repo!
-## Prerequisites
+A full-stack Todo application with React frontend and Node.js backend, containerized with Docker for easy setup and demonstration.
 
-NodeJS - if you don't already have it installed, check out [nvm](https://github.com/nvm-sh/nvm).
+## Quick Start with Docker 🚀
 
-## Getting started
-Fork the repository (see top-right button on GitHub) and clone the fork to your computer.
-### To start the backend:
+### Prerequisites
+- [Docker](https://www.docker.com/get-started) (version 20.10 or higher)
+- [Docker Compose](https://docs.docker.com/compose/install/) (version 2.0 or higher)
 
- - Navigate to the backend folder
- - Run `npm ci`
- - Run `npm start`
+### Run the Application
+```bash
+# Build and start all services
+docker-compose up --build
 
-### To start the frontend:
+# Or run in background
+docker-compose up --build -d
+```
 
- - Navigate to the frontend folder
- - Run `npm ci`
- - Run `npm start`
+> **Note**: The application uses Node.js 20 in Docker containers to support the better-sqlite3 dependency. If you encounter build errors, try cleaning Docker cache first
 
- A browsertab will automatically open and load the app.
+### Access the Application
+- **Frontend**: http://localhost:3000
+- **API Health Check**: http://localhost:3001/
 
-### Development set-up
-If you don't have a favorite editor we highly recommend [VSCode](https://code.visualstudio.com). We've also had some ESLint rules set up which will help you catch bugs etc. If you're using VSCode, install the regular [ESLint plugin](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and you should be good to go!
+### Stop the Application
+```bash
+# Stop all services
+docker-compose down
 
-You can open the root folder in one workspace, or `/frontend` and `/backend` in seperate workspaces - both should work fine.
+# Stop and remove volumes (this will delete the database)
+docker-compose down -v
 
-Check `.nvmrc` to see what node version is required to run the project. Just run `nvm use` if you have `nvm` installed. Later versions of node might work fine as well, but probably not earlier versions.
+# To reset the database manually, delete the data directory:
+# rm -rf backend/data
+```
 
-For those of you using Prettier (not a requirement), there's an .prettierrc file to ensure no unnecessary changes to the existing code. It should be picked up automatically by Prettier.
+## Features
 
-## Assignment
-Your assignment is to improve this todo list application. At the moment the application is simple and can only create and remove todos.
-As is, nothing is persisted in the server. As a result all state is cleared when refreshing the page!
-Below follows one main task and 4 additional tasks. Your assignment is to complete the main task together with at least 2 out of 4 of the additional tasks.
-If you feel constrained by time (which is totally fine!), prioritize quality over quantity.
+### Database Persistence
+- Uses SQLite database (`backend/data/todos.db`)
+- Data persists between container restarts
+- Database directory is mounted as a volume
+- Database file is automatically created on first run
 
-### Main Task
-Persist the todo lists on the server. Persisting in a database is not required. (Simple js structures on the server is fine). If you do go for an actual DB (again not required), be sure to include instructions of how to get it up and running.
 
-### Additional tasks
-- Don't require users to press save when an item is added/edited in the todo list. (Autosave functionality)
-- Make it possible to indicate that a todo is completed.
-- Indicate that a todo list is completed if all todo items within are completed.
-- Add a date for completion to todo items. Indicate how much time is remaining or overdue.
 
-## Submission
-Before submitting, read through all changes one last time - code quality matters!
-
-If you have developed without ESLint set up, run `npm run lint` in both `/backend` and `/frontend` and fix any errors/warnings.
-
-Send a link to your forked repository to your contact at Sellpy. Don't forget to mention which tasks you completed.

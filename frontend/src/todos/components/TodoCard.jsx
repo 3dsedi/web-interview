@@ -26,13 +26,8 @@ export const TodoCard = ({ todoList }) => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      try {
-        const response = await getTodos(todoList.id)
-        setTodos(response)
-      } catch (error) {
-        console.error('Failed to fetch todos:', error)
-        setTodos([])
-      }
+      const response = await getTodos(todoList.id)
+      setTodos(response || [])
     }
     fetchTodos()
   }, [todoList.id])
@@ -80,16 +75,17 @@ export const TodoCard = ({ todoList }) => {
       return toast.error('Title is required')
     }
     if (newTask.title.trim()) {
-      try {
-        const todoData = {
-          title: newTask.title,
-          text: newTask.detail,
-          due_date: newTask.dueDate,
-        }
-        const result = await createTodo(todoList.id, todoData)
+      const todoData = {
+        title: newTask.title,
+        text: newTask.detail,
+        due_date: newTask.dueDate,
+      }
+      const result = await createTodo(todoList.id, todoData)
+      console.log(result)
+      if (result) {
         setTodos([...todos, result])
         resetForm()
-      } catch (error) {
+      } else {
         toast.error('Error creating todo')
       }
     }
@@ -101,22 +97,20 @@ export const TodoCard = ({ todoList }) => {
   }
 
   const handleUpdateTodo = async (todoId, updateData) => {
-    try {
-      const result = await updateTodo(todoId, updateData)
+    const result = await updateTodo(todoId, updateData)
+    if (result) {
       setTodos(todos.map((todo) => (todo.id === todoId ? result : todo)))
-      console.log('Todo updated successfully:', result)
-    } catch (error) {
-      console.error('Error updating todo:', error)
+    } else {
+      toast.error('Error updating todo')
     }
   }
 
   const handleDeleteTodo = async (todoId) => {
-    try {
-      await deleteTodo(todoId)
+    const response = await deleteTodo(todoId)
+    if (response?.ok) {
       setTodos(todos.filter((todo) => todo.id !== todoId))
-      console.log('Todo deleted successfully')
-    } catch (error) {
-      console.error('Error deleting todo:', error)
+    } else {
+      toast.error('Error deleting todo')
     }
   }
 

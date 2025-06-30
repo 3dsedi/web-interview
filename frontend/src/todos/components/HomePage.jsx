@@ -8,70 +8,64 @@ import toast from 'react-hot-toast'
 export const HomePage = () => {
   const [todoLists, setTodoLists] = useState([])
   const [selectedListId, setSelectedListId] = useState(null)
-  const [sortOrder, setSortOrder] = useState('newest') 
+  const [sortOrder, setSortOrder] = useState('newest')
 
   const fetchTodoLists = async () => {
-    try {
-      const lists = await getTodoLists()
-      setTodoLists(Array.isArray(lists) ? lists : [])
-    } catch (error) {
-      console.error('Failed to fetch todo lists:', error)
-      setTodoLists([])
-      toast.error('Failed to fetch todo lists')
-    }
+    const lists = await getTodoLists()
+    setTodoLists(lists ? lists : [])
   }
 
   const handleCreateTodoList = async (title) => {
-    try {
-      const newTodoList = await createTodoList(title)
+    const newTodoList = await createTodoList(title)
+    if (newTodoList) {
       setTodoLists((prev) => [...prev, newTodoList])
       toast.success('List created successfully!')
       return newTodoList
-    } catch (error) {
+    } else {
       toast.error('Failed to create todo list')
-      throw error
+      return null
     }
   }
 
   const handleUpdateTodoList = async (listId, updates) => {
-    try {
-      const updatedList = await updateTodoList(listId, updates)
+    const updatedList = await updateTodoList(listId, updates)
+    if (updatedList) {
       setTodoLists((prev) =>
         prev.map((list) => (list.id === listId ? { ...list, ...updatedList } : list))
       )
       return updatedList
-    } catch (error) {
+    } else {
       toast.error('Failed to update todo list')
-      throw error
+      return null
     }
   }
 
   const handleDeleteTodoList = async (listId) => {
-    try {
-      await deleteTodoList(listId)
+    const response = await deleteTodoList(listId)
+    if (response?.ok) {
       setTodoLists((prev) => prev.filter((list) => list.id !== listId))
       if (selectedListId === listId) {
         setSelectedListId(null)
       }
       toast.success('List deleted successfully!')
-    } catch (error) {
+    } else {
       toast.error('Failed to delete todo list')
-      throw error
     }
   }
+
   useEffect(() => {
     fetchTodoLists()
   }, [])
 
-  const sortedTodoLists = useMemo(() => {    
+  const sortedTodoLists = useMemo(() => {
     return [...todoLists].sort((a, b) => {
       const dateA = new Date(a.created_at)
       const dateB = new Date(b.created_at)
-      
+
       if (sortOrder === 'newest') {
-        return dateB - dateA 
+        return dateB - dateA
       } else {
-        return dateA - dateB 
+        return dateA - dateB
       }
     })
   }, [todoLists, sortOrder])

@@ -16,29 +16,26 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Add as AddIcon, Assignment as TodoIcon } from '@mui/icons-material'
-import toast from 'react-hot-toast'
 import { TodoListItem } from './TodoListItem'
 
 const DRAWER_WIDTH = 280
 
 export const Sidebar = ({
-  todoLists ,
+  todoLists,
   onCreateList,
   onDeleteList,
   onEditList,
   sortOrder,
-  onSortChange
+  onSortChange,
 }) => {
   const [openModal, setOpenModal] = useState(false)
   const [newListTitle, setNewListTitle] = useState('')
 
   const handleCreateTodoList = async () => {
-    try {
-      await onCreateList(newListTitle)
+    const result = await onCreateList(newListTitle)
+    if (result) {
       setNewListTitle('')
       setOpenModal(false)
-    } catch (error) {
-      toast.error('Failed to create todo list')
     }
   }
 
@@ -74,15 +71,15 @@ export const Sidebar = ({
         </Toolbar>
         <Divider />
         <Box sx={{ p: 2 }}>
-          <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+          <FormControl fullWidth size='small' sx={{ mb: 2 }}>
             <InputLabel>Sort by</InputLabel>
             <Select
               value={sortOrder}
-              label="Sort by"
+              label='Sort by'
               onChange={(e) => onSortChange?.(e.target.value)}
             >
-              <MenuItem value="newest">Newest First</MenuItem>
-              <MenuItem value="oldest">Oldest First</MenuItem>
+              <MenuItem value='newest'>Newest First</MenuItem>
+              <MenuItem value='oldest'>Oldest First</MenuItem>
             </Select>
           </FormControl>
 
@@ -99,7 +96,7 @@ export const Sidebar = ({
             fullWidth
             variant='contained'
             startIcon={<AddIcon />}
-            data-testid="create-new-list-button"
+            data-testid='create-new-list-button'
             sx={{
               py: 1.5,
               textTransform: 'none',
@@ -135,12 +132,18 @@ export const Sidebar = ({
             label='Todo List Title'
             value={newListTitle}
             onChange={(e) => setNewListTitle(e.target.value)}
-            data-testid="todo-list-title-input"
+            data-testid='todo-list-title-input'
             autoFocus
           />
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-            <Button onClick={(e) => setOpenModal(false)} data-testid="cancel-button">Cancel</Button>
-            <Button onClick={handleCreateTodoList} disabled={!newListTitle} data-testid="create-button">
+            <Button onClick={(e) => setOpenModal(false)} data-testid='cancel-button'>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateTodoList}
+              disabled={!newListTitle}
+              data-testid='create-button'
+            >
               Create
             </Button>
           </Box>
