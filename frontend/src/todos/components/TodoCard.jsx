@@ -51,12 +51,10 @@ export const TodoCard = ({ todoList }) => {
       if (a.completed !== b.completed) {
         return a.completed - b.completed
       }
-
       if (a.completed === 0) {
         if (!a.due_date && !b.due_date) return 0
         if (!a.due_date) return 1
         if (!b.due_date) return -1
-
         const dateA = new Date(a.due_date)
         const dateB = new Date(b.due_date)
         return dateA - dateB
@@ -81,9 +79,8 @@ export const TodoCard = ({ todoList }) => {
         due_date: newTask.dueDate,
       }
       const result = await createTodo(todoList.id, todoData)
-      console.log(result)
       if (result) {
-        setTodos([...todos, result])
+        setTodos([...todos, { ...result, completed: 0 }])
         resetForm()
       } else {
         toast.error('Error creating todo')
