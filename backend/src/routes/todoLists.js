@@ -3,7 +3,7 @@ import {
   getAllTodoListsService,
   createTodoListService,
   deleteTodoListService,
-  updateTodoListTitleService
+  updateTodoListTitleService,
 } from '../service/todoLists.js'
 import { validate as validateUUID } from 'uuid'
 
@@ -31,12 +31,8 @@ router.post('/', (req, res) => {
     res.status(201).json(result)
   } catch (err) {
     console.error(err)
-    if (err.message === 'Failed to create todo list') {
-      res.status(500).json({ error: err.message })
-    } else {
-      res.status(500).json({ error: err.message })
-    }
-  }
+    res.status(500).json({ error: err.message })
+}
 })
 
 router.delete('/:id', (req, res) => {
@@ -52,7 +48,7 @@ router.delete('/:id', (req, res) => {
     if (err.message === 'Todo list not found') {
       res.status(404).json({ error: err.message })
     } else {
-      res.status(500).json({ error: err.message})
+      res.status(500).json({ error: err.message })
     }
   }
 })

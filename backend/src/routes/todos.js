@@ -4,7 +4,7 @@ import {
   createTodoService,
   updateTodoService,
   deleteTodoService,
-  getTodoByIdService
+  getTodoByIdService,
 } from '../service/todos.js'
 import { validate as validateUUID } from 'uuid'
 
@@ -31,16 +31,16 @@ router.get('/todo-lists/:listId/todos', (req, res) => {
 router.get('/todos/:id', (req, res) => {
   const { id } = req.params
   if (!validateUUID(id)) {
-    return res.status(400).json({ error: 'Invalid todo id' })
+    return res.status(400).json({ error: 'Invalid ID format' })
   }
   try {
     const todo = getTodoByIdService(id)
     res.json(todo)
   } catch (err) {
+    console.error(err)
     if (err.message === 'Todo not found') {
       return res.status(404).json({ error: err.message })
     }
-    console.error(err)
     res.status(500).json({ error: err.message })
   }
 })
@@ -56,14 +56,11 @@ router.post('/todo-lists/:listId/todos', (req, res) => {
     const result = createTodoService(listId, title, text, due_date)
     res.status(201).json(result)
   } catch (err) {
-    console.error(err)
     if (err.message === 'Todo list not found') {
-      res.status(404).json({ error: err.message })
-    } else if (err.message === 'Failed to create todo') {
-      res.status(500).json({ error: err.message })
-    } else {
-      res.status(500).json({ error: err.message })
+      return res.status(404).json({ error: err.message })
     }
+    console.error(err)
+    res.status(500).json({ error: err.message })
   }
 })
 
@@ -77,12 +74,11 @@ router.patch('/todos/:id', (req, res) => {
     const updated = updateTodoService(id, { title, text, completed, due_date })
     res.json(updated)
   } catch (err) {
-    console.error(err)
     if (err.message === 'Todo not found') {
-      res.status(404).json({ error: err.message })
-    } else {
-      res.status(500).json({ error: err.message })
+      return res.status(404).json({ error: err.message })
     }
+    console.error(err)
+    res.status(500).json({ error: err.message })
   }
 })
 
