@@ -15,11 +15,7 @@ router.get('/', (req, res) => {
     res.json(lists)
   } catch (err) {
     console.error(err)
-    if (err.message === 'No todo lists found') {
-      res.status(404).json({ error: err.message })
-    } else {
-      res.status(500).json({ error: err.message })
-    }
+    res.status(500).json({ error: err.message })
   }
 })
 
@@ -32,7 +28,7 @@ router.post('/', (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: err.message })
-}
+  }
 })
 
 router.delete('/:id', (req, res) => {
