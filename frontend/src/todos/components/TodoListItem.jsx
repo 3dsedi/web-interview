@@ -17,17 +17,7 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
       return
     }
 
-    if (editTitle.trim() && editTitle !== title) {
-      const result = await onEdit(editTitle.trim())
-      if (result) {
-        setIsEditing(false)
-      } else {
-        setEditTitle(title)
-        setIsEditing(false)
-      }
-    } else {
-      setIsEditing(false)
-    }
+       await onEdit(editTitle.trim())
   }
 
   const handleCancelEdit = () => {
@@ -61,12 +51,11 @@ export const TodoListItem = ({ title, onDelete, onEdit }) => {
         {isEditing ? (
           <TextField
             value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSaveEdit()
-              if (e.key === 'Escape') handleCancelEdit()
+            onChange={(e) => {
+              handleSaveEdit(e.target.value)
+              setEditTitle(e.target.value)
             }}
-            onBlur={handleSaveEdit}
+            onBlur={()=>setIsEditing(false)}
             autoFocus
             required
             size='small'

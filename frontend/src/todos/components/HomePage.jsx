@@ -7,7 +7,6 @@ import toast from 'react-hot-toast'
 
 export const HomePage = () => {
   const [todoLists, setTodoLists] = useState([])
-  const [selectedListId, setSelectedListId] = useState(null)
   const [sortOrder, setSortOrder] = useState('newest')
 
   const fetchTodoLists = async () => {
@@ -44,9 +43,6 @@ export const HomePage = () => {
     const response = await deleteTodoList(listId)
     if (response?.ok) {
       setTodoLists((prev) => prev.filter((list) => list.id !== listId))
-      if (selectedListId === listId) {
-        setSelectedListId(null)
-      }
       toast.success('List deleted successfully!')
     } else {
       toast.error('Failed to delete todo list')
@@ -75,7 +71,6 @@ export const HomePage = () => {
       <Box sx={{ flexShrink: 0 }}>
         <Sidebar
           todoLists={sortedTodoLists}
-          selectedListId={selectedListId}
           onCreateList={handleCreateTodoList}
           onDeleteList={handleDeleteTodoList}
           onEditList={handleUpdateTodoList}

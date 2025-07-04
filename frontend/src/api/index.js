@@ -60,16 +60,6 @@ export const getTodos = async (listId) => {
   }
 }
 
-export const getTodo = async (id) => {
-  try {
-    const response = await fetch(`${BASE_URL}/todos/${id}`)
-    return await response.json()
-  } catch (error) {
-    console.error(`Failed to get todo: ${error}`)
-    throw error
-  }
-}
-
 export const createTodo = async (listId, todoData) => {
   try {
     const response = await fetch(`${BASE_URL}/todo-lists/${listId}/todos`, {

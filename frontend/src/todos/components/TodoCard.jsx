@@ -18,11 +18,6 @@ import { TodoDetail } from './TodoDetail'
 export const TodoCard = ({ todoList }) => {
   const [todos, setTodos] = useState([])
   const [showAddTask, setShowAddTask] = useState(false)
-  const [newTask, setNewTask] = useState({
-    title: '',
-    detail: '',
-    dueDate: '',
-  })
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -63,36 +58,6 @@ export const TodoCard = ({ todoList }) => {
     })
   }, [todos])
 
-  const handleTodoChange = (field, value) => {
-    const updatedTask = { ...newTask, [field]: value }
-    setNewTask(updatedTask)
-  }
-
-  const handleCreateTodo = async () => {
-    if (!newTask.title || !newTask.title.trim()) {
-      return toast.error('Title is required')
-    }
-    if (newTask.title.trim()) {
-      const todoData = {
-        title: newTask.title,
-        text: newTask.detail,
-        due_date: newTask.dueDate,
-      }
-      const result = await createTodo(todoList.id, todoData)
-      if (result) {
-        setTodos([...todos, { ...result, completed: 0 }])
-        resetForm()
-      } else {
-        toast.error('Error creating todo')
-      }
-    }
-  }
-
-  const resetForm = () => {
-    setNewTask({ title: '', detail: '', dueDate: '' })
-    setShowAddTask(false)
-  }
-
   const handleUpdateTodo = async (todoId, updateData) => {
     const result = await updateTodo(todoId, updateData)
     if (result) {
@@ -108,6 +73,22 @@ export const TodoCard = ({ todoList }) => {
       setTodos(todos.filter((todo) => todo.id !== todoId))
     } else {
       toast.error('Error deleting todo')
+    }
+  }
+
+  const handleCreateTodo = async ({ title, detail, dueDate, form }) => {
+    const todoData = {
+      title,
+      text: detail,
+      due_date: dueDate,
+    }
+    const result = await createTodo(todoList.id, todoData)
+    if (result) {
+      setTodos((prev) => [...prev, { ...result, completed: 0 }])
+      setShowAddTask(false)
+      form.reset()
+    } else {
+      toast.error('Error creating todo')
     }
   }
 
@@ -198,24 +179,17 @@ export const TodoCard = ({ todoList }) => {
           startIcon={showAddTask ? <Close /> : <Add />}
           data-testid='add-todo-button'
           onClick={() => {
-            if (showAddTask && !newTask.title.trim()) {
-              resetForm()
-            } else if (!showAddTask) {
-              setShowAddTask(true)
-            }
+            setShowAddTask((prev) => !prev)
           }}
           sx={{
             mb: 2,
             textTransform: 'none',
-            color: showAddTask && !newTask.title.trim() ? '#d32f2f' : '#1976d2',
-            opacity: showAddTask && newTask.title.trim() ? 0 : 1,
-            pointerEvents: showAddTask && newTask.title.trim() ? 'none' : 'auto',
+            color: showAddTask ? '#d32f2f' : '#1976d2',
             '&:hover': {
-              borderColor: showAddTask && !newTask.title.trim() ? '#c62828' : '#1565c0',
-              backgroundColor:
-                showAddTask && !newTask.title.trim()
-                  ? 'rgba(211, 47, 47, 0.04)'
-                  : 'rgba(25, 118, 210, 0.04)',
+              borderColor: showAddTask ? '#c62828' : '#1565c0',
+              backgroundColor: showAddTask
+                ? 'rgba(211, 47, 47, 0.04)'
+                : 'rgba(25, 118, 210, 0.04)',
             },
           }}
         >
@@ -223,45 +197,48 @@ export const TodoCard = ({ todoList }) => {
         </Button>
 
         {showAddTask && (
-          <Box
-            sx={{ mb: 2 }}
-            onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget)) {
-                handleCreateTodo()
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              const formData = new FormData(e.target)
+              const title = formData.get('title')?.trim()
+              const detail = formData.get('detail')
+              const dueDate = formData.get('dueDate')
+              if (!title) {
+                return toast.error('Title is required')
               }
+              handleCreateTodo({ title, detail, dueDate, form: e.target })
             }}
+            style={{ marginBottom: 16 }}
           >
             <TextField
               fullWidth
               required
               label='Title'
+              name='title'
               variant='outlined'
               size='small'
-              value={newTask.title}
               data-testid='todo-title-input'
-              onChange={(e) => handleTodoChange('title', e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               label='Detail'
+              name='detail'
               variant='outlined'
               size='small'
               multiline
               rows={3}
-              value={newTask.detail}
               data-testid='todo-detail-input'
-              onChange={(e) => handleTodoChange('detail', e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               label='Due Date'
+              name='dueDate'
               type='date'
               variant='outlined'
               size='small'
-              value={newTask.dueDate}
-              onChange={(e) => handleTodoChange('dueDate', e.target.value)}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -271,7 +248,10 @@ export const TodoCard = ({ todoList }) => {
                 },
               }}
             />
-          </Box>
+            <Button type='submit' variant='contained' sx={{ mt: 2 }}>
+              Add Task
+            </Button>
+          </form>
         )}
         {sortedTodos.map((todo) => (
           <TodoDetail

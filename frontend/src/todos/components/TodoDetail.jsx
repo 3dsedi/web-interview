@@ -14,7 +14,7 @@ import toast from 'react-hot-toast'
 
 export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
   const [editing, setEditing] = useState(false)
-  const [completed, setCompleted] = useState(todo.completed)
+  const completed = todo.completed
   const [anchorEl, setAnchorEl] = useState(null)
   const [editData, setEditData] = useState({
     title: todo.title,
@@ -49,7 +49,6 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
       toast.error('Title is required')
       return
     }
-    
     onUpdate(todo.id, editData)
     setEditing(false)
   }, [todo.id, editData, onUpdate])
@@ -74,7 +73,6 @@ export const TodoDetail = ({ todo, onUpdate, onDelete }) => {
   }
 
   const handleCompletedChange = (isCompleted) => {
-    setCompleted(isCompleted)
     onUpdate(todo.id, {
       completed: isCompleted ? 1 : 0,
     })
